@@ -41,8 +41,13 @@ var Shape = function(shape, size, color) {
   }
 
   this.dead = false;
+  this.dragging = false;
+  this.type = shape;
+  this.color = color;
 
   self.update = function() {
+    if(self.dragging) return;
+
     if(scaleDirection == 1 && scale < maxScale) {
       scale += 0.01;
     } else if(scaleDirection == 1) {
