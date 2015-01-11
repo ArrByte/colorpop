@@ -1,3 +1,23 @@
+function makeBox(elem, color, size) {
+  elem.setAttribute('style', 'background-color: ' + color
+    +';width: ' + size + 'px; height: ' + size + 'px');
+}
+
+function makeTriangle(elem, color, size) {
+  var cssString = 'width: 0; height: 0;' +
+	                'border-left:   ' + size + 'px solid transparent;' +
+	                'border-right:  ' + size + 'px solid transparent;' +
+	                'border-bottom: ' + size + 'px solid ' + color + ';';
+  elem.setAttribute('style', cssString);
+}
+
+function makeCircle(elem, color, size) {
+  var cssString = 'background-color: ' + color + ';' +
+                  'width: ' + size + 'px; height: ' + size + 'px;' +
+                  'border-radius: ' + (size/2) + 'px;';
+  elem.setAttribute('style', cssString);
+}
+
 var Shape = function(shape, size, color) {
   var self = this;
 
@@ -7,24 +27,33 @@ var Shape = function(shape, size, color) {
       shapeElem = document.createElement('div');
 
   shapeElem.className = 'shape';
-  shapeElem.style.backgroundColor = color;
-  shapeElem.style.width  = size + 'px';
-  shapeElem.style.height = size + 'px';
+
+  switch(shape) {
+    case 'box':
+      makeBox(shapeElem, color, size);
+      break;
+    case 'triangle':
+      makeTriangle(shapeElem, color, size);
+      break;
+    case 'circle':
+      makeCircle(shapeElem, color, size);
+      break;
+  }
 
   this.dead = false;
 
   self.update = function() {
     if(scaleDirection == 1 && scale < maxScale) {
-      scale += 0.1;
+      scale += 0.01;
     } else if(scaleDirection == 1) {
       scaleDirection = -1;
     } else if(scaleDirection == -1 && scale > 0) {
-      scale -= 0.1;
+      scale -= 0.01;
     } else if(shapeElem.parentNode) {
       shapeElem.parentNode.removeChild(shapeElem);
       self.dead = true;
     }
-    shapeElem.transform = 'scale(' + scale + ')';
+    shapeElem.style.transform = 'scale(' + scale + ',' + scale + ')';
   }
 
   self.element = shapeElem;
